@@ -49,4 +49,4 @@ For example if the address of a group is *https://soundcloud.com/groups/soundmap
 
 By going to this URL, you will get all the information of your group encoded in JSON, don't worry! The second value is just all you need, the id of your group.
 
-	(...), "id":124361, (...)
+	{"kind":"group","id":124361,"created_at":"2013/05/03 14:26:36 +0000","permalink":"soundmapping-project","track_count":3,"members_count":4,"moderated":false,"contributors_count":3,"name":"Soundmapping Project","short_description":"More info: http://listening-city.escoitar.org/spip.php?article5","description":"Trial group for web developent, soundmapping script work in progress!","uri":"http://api.soundcloud.com/groups/124361","artwork_url":"http://a1.sndcdn.com/images/default_avatar_large.png?435a760","permalink_url":"http://soundcloud.com/groups/soundmapping-project","creator":{"id":43649164,"kind":"user","permalink":"mobile-memories","username":"mobile-memories","uri":"http://api.soundcloud.com/users/43649164","permalink_url":"http://soundcloud.com/mobile-memories","avatar_url":"http://a1.sndcdn.com/images/default_avatar_large.png?435a760"}}
