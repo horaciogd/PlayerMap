@@ -1,0 +1,7 @@
+.player .interface li { background-image: url('../images/pix/all_player_icons@2x.png') !important; background-size: 391px 35px !important; }
+.player .interface li:active { background-image: url('../images/pix/all_player_icons_grey@2x.png') !important; }
+.player .interface .progress_bar { background-image: none !important; }
+.player .interface .progress_bar:active { background-image: none !important; }
+
+.customWindow .closeImg { background-image: url('../images/pix/infobox_close@2x.png') !important; background-size: 23px 22px !important; }
+.customWindow .arrowDiv { background-image: url('../images/pix/infobox_arrows@2x.png') !important; background-size: 173px 35px !important; }

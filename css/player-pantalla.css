@@ -1,0 +1,232 @@
+#spip-admin{ display: none; }
+* { padding: 0; margin: 0; }
+a, a:link, a:visited, a:hover, a:active { color: #4c4c4c; text-decoration:none; }
+body { letter-spacing: 1px; overflow: hidden; }
+
+.map { position: absolute; z-index: 0; top: 0; right: 0; left: 0; bottom: -14px; }
+
+.full {
+	-webkit-border-radius: 15px;
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+	border: 3px #052d29 solid;
+	-webkit-box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5);
+	-moz-box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5);
+	box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5);
+	background: rgb(0, 59, 55);
+	background: -moz-linear-gradient(0deg, rgb(33, 75, 84) 0%, rgb(41, 102, 87) 100%);
+	background: -webkit-linear-gradient(0deg, rgb(33, 75, 84) 0%, rgb(41, 102, 87) 100%);
+	background: -o-linear-gradient(0deg, rgb(33, 75, 84) 0%, rgb(41, 102, 87) 100%);
+	background: -ms-linear-gradient(0deg, rgb(33, 75, 84) 0%, rgb(41, 102, 87) 100%);
+	background: linear-gradient(90deg, rgb(33, 75, 84) 0%, rgb(41, 102, 87) 100%);
+	display: none;
+}
+.ipad { position: absolute; z-index: 0; top: 0; right: 0; left: 0; height: 0px; overflow: visible; display: none; }
+
+.player .header { font-family: 'Varela Round', sans-serif; text-align: center; color: #444343; }
+.full .header { position: absolute; top: 0; right: 0; margin: 5px; }
+.ipad .header {
+	position: relative;
+	margin: 10px auto;
+	-webkit-border-radius: 15px;
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+	border: 3px #052d29 solid;
+	-webkit-box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5);
+	-moz-box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5);
+	box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5);
+	background: rgb(0, 59, 55);
+	background: -moz-linear-gradient(0deg, rgb(33, 75, 84) 0%, rgb(41, 102, 87) 100%);
+	background: -webkit-linear-gradient(0deg, rgb(33, 75, 84) 0%, rgb(41, 102, 87) 100%);
+	background: -o-linear-gradient(0deg, rgb(33, 75, 84) 0%, rgb(41, 102, 87) 100%);
+	background: -ms-linear-gradient(0deg,rgb(33, 75, 84) 0%, rgb(41, 102, 87) 100%);
+	background: linear-gradient(90deg, rgb(33, 75, 84) 0%, rgb(41, 102, 87) 100%);
+}
+.ipad .box .info {
+	padding: 12px;
+	text-align: justify;
+}
+.ipad .box .info  img { 
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	margin-bottom: 12px;
+ }
+.player .box {
+	border: 2px #444343 solid;
+	-webkit-border-radius: 9px;
+	-moz-border-radius: 9px;
+	border-radius: 9px;
+	padding: 4px;
+	margin: 5px;
+	cursor: pointer;
+	overflow: hidden;
+	-webkit-box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5);
+	-moz-box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5);
+	box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5);
+	background: rgb(255, 255, 255);
+	background: -moz-linear-gradient(90deg, rgb(255, 255, 255) 10%, rgb(220, 220, 220) 100%);
+	background: -webkit-linear-gradient(90deg, rgb(255, 255, 255) 10%, rgb(220, 220, 220) 100%);
+	background: -o-linear-gradient(90deg, rgb(255, 255, 255) 10%, rgb(220, 220, 220) 100%);
+	background: -ms-linear-gradient(90deg, rgb(255, 255, 255) 10%, rgb(220, 220, 220) 100%);
+	background: linear-gradient(180deg, rgb(255, 255, 255) 10%, rgb(220, 220, 220) 100%);
+}
+
+.ipad .header p {
+	position: absolute;
+	border: 2px #444343 solid;
+	-webkit-border-radius: 9px;
+	-moz-border-radius: 9px;
+	border-radius: 9px;
+	padding: 4px;
+	margin: 2px auto auto -6px;
+	background: rgb(255, 255, 255);
+	background: -moz-linear-gradient(90deg, rgb(255, 255, 255) 10%, rgb(220, 220, 220) 100%);
+	background: -webkit-linear-gradient(90deg, rgb(255, 255, 255) 10%, rgb(220, 220, 220) 100%);
+	background: -o-linear-gradient(90deg, rgb(255, 255, 255) 10%, rgb(220, 220, 220) 100%);
+	background: -ms-linear-gradient(90deg, rgb(255, 255, 255) 10%, rgb(220, 220, 220) 100%);
+	background: linear-gradient(180deg, rgb(255, 255, 255) 10%, rgb(220, 220, 220) 100%);
+	
+}
+.ipad .header h1 { margin-bottom: 10px; }
+
+.player .header p, .player .interface p { font-size: 0.75em; /*font-style: italic;*/ }
+.player .header h1 { height: 88px; line-height: 80px;  vertical-align: middle; font-size: 2.6em; font-weight: bold; letter-spacing: 4px; text-shadow: 1px 1px 3px rgba(60, 60, 60, 0.5); }
+
+.player .strip { position: relative; height: 58px; overflow: hidden; }
+.player .strip .wrapper { position: absolute; top: 8px; height: 80px; overflow: visible; }
+.ipad .strip { height: 80px; }
+.ipad .strip .wrapper { top: 0; }
+.full .strip { height: 88px; }
+.full .strip .wrapper { top: 8px; }
+
+.player .artwork { position: relative; left: 0; list-style-type: none; height: 80px; overflow: visible; }
+.player .artwork li { display: block; position: absolute; top: 0; }
+.player .artwork li span { position: absolute; top: 0; left: 0; color: #fff; width: 100px; }
+.player .artwork img { width: 80px; height: 80px; 
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+}
+.player .artwork img.tracklist { position: absolute; top: 0; left: 0; opacity: 0; }
+.player .artwork img.background { position: absolute; top: 0; left: 0; opacity: 1; }
+
+.full .interface { height: 39px; }
+.ipad .interface {
+	margin: 20px auto;
+	position: relative;
+	width: 360px;
+	height: 44px;
+	-webkit-border-radius: 15px;
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+	border: 3px #052d29 solid;
+	-webkit-box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5);
+	-moz-box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5);
+	box-shadow: 3px 3px 6px rgba(60, 60, 60, 0.5);
+	background: rgb(0, 59, 55);
+	background: -moz-linear-gradient(0deg, rgb(33, 75, 84) 0%, rgb(41, 102, 87) 100%);
+	background: -webkit-linear-gradient(0deg, rgb(33, 75, 84) 0%, rgb(41, 102, 87) 100%);
+	background: -o-linear-gradient(0deg, rgb(33, 75, 84) 0%, rgb(41, 102, 87) 100%);
+	background: -ms-linear-gradient(0deg, rgb(33, 75, 84) 0%, rgb(41, 102, 87) 100%);
+	background: linear-gradient(90deg, rgb(33, 75, 84) 0%, rgb(41, 102, 87) 100%);
+}
+
+.player .interface ul { position: relative; list-style-type: none; }
+.player .interface li { position: absolute; top: 0; height: 35px; cursor: pointer; background-image: url('../images/pix/all_player_icons.png'); background-repeat: no-repeat; 
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-tap-highlight-color: transparent;
+}
+.ipad .newInfo .pinfo {
+	position: absolute;
+	top: 0px;
+	height: 35px;
+	cursor: pointer;
+	background-image: url("../images/pix/all_player_icons.png");
+	background-repeat: no-repeat;
+	width: 32px;
+	top: -2px;
+	right: 0px;
+	background-position: -359px 0;
+}
+.player .interface li:active, .ipad .newInfo .pinfo:active { background-image: url('../images/pix/all_player_icons_grey.png'); }
+
+.player .interface h2 { font-size: 1.2em; font-weight: bold; line-height: 1.2em; display: none; }
+.player .interface p { display: none; }
+.player .interface .prev { width: 42px; left: 6px; background-position: 0 0; }
+.player .interface .play { width: 26px; left: 56px; background-position: -47px 0; }
+.player .interface .stop { width: 32px; left: 56px; background-position: -129px 0; }
+.player .interface .pause { width: 23px; left: 56px; background-position: -166px 0; display: none; }
+.player .interface .next { width: 42px; right: 42px; background-position: -80px 0; }
+.player .interface .volume { width: 33px; right: 8px; }
+.player .interface .pinfo { width: 32px; top: -6px; right: 2px; background-position: -359px 0; display: none; }
+.player .interface .progress_bar { 
+	margin: 4px 94px 0 58px;
+	background-color: #fff;
+	border: 2px #444343 solid;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	top: 4px;
+	height: 24px;
+	position: relative;
+	background-image: none !important;
+}
+.player .interface .time { display: none; }
+.player .interface .progress_bar:active { background-image: none !important; }
+.player .interface .progress_bar span {
+	display: block;
+	position: absolute;
+	background: url('../images/pix/progress_bg.png');
+	top: 0;
+	left: 0;
+	height: 24px;
+	width: 3%;
+	-moz-border-radius-topleft: 4px;
+	-webkit-border-top-left-radius: 4px;
+	border-top-left-radius: 4px;
+	-moz-border-radius-bottomleft: 4px;
+	-webkit-border-bottom-left-radius: 4px;
+	border-bottom-left-radius: 4px;
+}
+.ipad .newInfo {
+	position: absolute;
+	right: 20px;
+	width: 288px;
+	height: 90px;
+	background-color: #fff;
+	border: 3px #444343 solid;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	-webkit-box-shadow: 3px 3px 8px rgba(60, 60, 60, 0.5);
+	-moz-box-shadow: 3px 3px 8px rgba(60, 60, 60, 0.5);
+	box-shadow: 3px 3px 8px rgba(60, 60, 60, 0.5);
+	padding: 22px 14px;
+	text-align: center;
+	font-size: 1em;
+	overflow: hidden; 
+}
+.customWindow { background-color: #fff; border: 3px #444343 solid; -moz-border-radius: 10px; border-radius: 10px; -webkit-box-shadow: 3px 3px 8px rgba(60, 60, 60, 0.5); -moz-box-shadow: 3px 3px 8px rgba(60, 60, 60, 0.5); box-shadow: 3px 3px 8px rgba(60, 60, 60, 0.5); padding: 4px 12px; text-align: justify; font-size: 1em; overflow: visible; }
+.customWindow h3, .newInfo h1 { font-family: 'Varela Round', sans-serif !important; margin-right: 22px; font-size: 1.8em; letter-spacing: 2px; padding: 10px 0 2px 0; text-align: left; }
+.newInfo h1 { text-align: center; }
+.customWindow .contentDiv, .newInfo p { font-family: 'Varela Round', sans-serif !important; }
+.customWindow .contentDiv img { 
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	margin: 6px auto;
+	width: 350px;
+	height: 150px;
+ }
+ .customWindow .contentDiv span{ font-weight: bold; font-size: 1.2em; line-height: 2.8em; }
+.customWindow .fancybox { display: block; width: 100px; margin: 0 8px 0 0; float: left; }
+.customWindow .closeWrapper { position: absolute;  top: 0; right: 0; }
+.customWindow .closeImg { background-color: #4c4c4c; background: url('../images/pix/infobox_close.png') no-repeat center; width: 23px; height: 22px; cursor: pointer; margin: 4px; }
+.customWindow .arrowDiv { height: 20px; width: 33px; position: absolute; bottom: -20px; background: url('../images/pix/infobox_arrows.png') no-repeat -140px  -2px; }
+
+
+.tracks { display: none; }
+.pause { display: none; }
+.play { display: block; }
+.playing .play { display: none; }
+.playing .pause { display: block; }
