@@ -49,4 +49,4 @@ For example if the address of a group is *https://soundcloud.com/groups/soundmap
 
 By going to this URL, you will get all the information of your group encoded in JSON, don't worry! The second value is just all you need, the id of your group.
 
-*(...), "id": **124361**, (...)*
+	(...), "id":124361, (...)
