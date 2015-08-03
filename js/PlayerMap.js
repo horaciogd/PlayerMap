@@ -291,6 +291,7 @@ PlayerMap.prototype.groupData = function(data) {
 PlayerMap.prototype.loadGroupTracks = function() {
 	var self = this;
 	// load soundcloud group tracks data
+	// get url via alert('https://api.soundcloud.com/groups/'+ this.group +'/tracks.json?client_id='+ this.client_id +'&offset='+ this.offset +'&limit='+ this.limit +'&callback=?');
 	$.getJSON('https://api.soundcloud.com/groups/'+ this.group +'/tracks.json?client_id='+ this.client_id +'&offset='+ this.offset +'&limit='+ this.limit +'&callback=?', function(data){
 		self.groupTracks(data, function(){
 			self.loadGroupTracks();
@@ -307,13 +308,11 @@ PlayerMap.prototype.groupTracks = function(data, more, callback) {
 	var self = this;
 	var count = $(data).length - 1;
 	$.each(data, function(index, track) {
-		n++;
 		var tag_list = track.tag_list;
 		if (tag_list!=null) {
 			var tags = tag_list.split(" ");
 			var lat, lng;
 			track.tags = tags;
-			track.n = n;
 			for (var i=0; i<tags.length; i++) {
 				var clean = tags[i].toLowerCase();
 				var num = clean.indexOf("lat:");
@@ -329,93 +328,111 @@ PlayerMap.prototype.groupTracks = function(data, more, callback) {
 				}
 			}
 		}
-		var artwork_url = track.artwork_url;
-		// Create the track Marker
-		var text = track.description;
-		text = text.replace(/\r\n\r\n/g,"<br />");
-		var html = '<h3>'+ track.title +'</h3>';
-		if (artwork_url!=null) {
-			var artwork_path = artwork_url.split('-large');
-			var artwork_link = artwork_path[0]+'-t500x500'+artwork_path[1];
-			html += '<a class="thickbox" title="'+track.title+'" href="'+ artwork_link +'"><img src="'+ artwork_url +'" /></a>';
-		}
-		html += '<p>'+text+'</p>';
-		track.marker = new SoundMarker();
-		track.marker.initialize({
-			lat: track.lat,
-			lng: track.lng,
-			map: self.map,
-			text: html,
-			title: track.title,
-			path: self.path,
-			id: track.id,
-			player: self,
-		});
-		self.trackIdList.push(track.id);
-		// Create a list item for each track and associate the track *data* with it.
-		// retina icon trick
-		/*
-    	if(window.devicePixelRatio >= 2) {
-    		if (artwork_url!=null) {
-				var artwork_path = artwork_url.split('-large');
-				artwork_url = artwork_path[0] +'-t300x300'+ artwork_path[1];
-				//background_artwork_url = 'http://listening-city.escoitar.org/greyscale.php?image='+ artwork_url;
-				background_artwork_url = artwork_url;
+		if ((typeof track.genre != "undefined")&&(typeof track.genre != null)) {
+			var clean = track.genre.toLowerCase();
+			var num = clean.indexOf("lat:");
+			if (num!=-1) {
+				var latData = track.genre.split(":");
+				track.lat = parseFloat(latData[1]);
 			} else {
-				var artwork_path = self.default_image.split('.');
-				artwork_url = self.path + artwork_path[0] +'@2x.'+ artwork_path[1];
-				//background_artwork_url = self.path + artwork_path[0] +'_grey@2x.'+ artwork_path[1];
-				background_artwork_url = artwork_url;
+				var num = clean.indexOf("lng:");
+				if (num!=-1) {
+					var lngData = track.genre.split(":");
+					track.lng = parseFloat(lngData[1]);
+				}
 			}
-    	} else {*/
-    		if (artwork_url==null) artwork_url = self.path + self.default_image;
-    		background_artwork_url = artwork_url;
-    	//}
-    	$('<li id="track_'+ track.id +'">'+ track.title +'</li>').data('track', track).appendTo("#player_"+ self.id +" .tracks");
+		}
+		if ((typeof track.lat != "undefined")&&(typeof track.lng != "undefined")) {
+			n++;
+			track.n = n;
+			var artwork_url = track.artwork_url;
+			// Create the track Marker
+			var text = track.description;
+			text = text.replace(/\r\n\r\n/g,"<br />");
+			var html = '<h3>'+ track.title +'</h3>';
+			if (artwork_url!=null) {
+				var artwork_path = artwork_url.split('-large');
+				var artwork_link = artwork_path[0]+'-t500x500'+artwork_path[1];
+				html += '<a class="thickbox" title="'+track.title+'" href="'+ artwork_link +'"><img src="'+ artwork_url +'" /></a>';
+			}
+			html += '<p>'+text+'</p>';
+			track.marker = new SoundMarker();
+			track.marker.initialize({
+				lat: track.lat,
+				lng: track.lng,
+				map: self.map,
+				text: html,
+				title: track.title,
+				path: self.path,
+				id: track.id,
+				player: self,
+			});
+			self.trackIdList.push(track.id);
+			// Create a list item for each track and associate the track *data* with it.
+			// retina icon trick
+			/*
+    		if(window.devicePixelRatio >= 2) {
+    			if (artwork_url!=null) {
+					var artwork_path = artwork_url.split('-large');
+					artwork_url = artwork_path[0] +'-t300x300'+ artwork_path[1];
+					//background_artwork_url = 'http://listening-city.escoitar.org/greyscale.php?image='+ artwork_url;
+					background_artwork_url = artwork_url;
+				} else {
+					var artwork_path = self.default_image.split('.');
+					artwork_url = self.path + artwork_path[0] +'@2x.'+ artwork_path[1];
+					//background_artwork_url = self.path + artwork_path[0] +'_grey@2x.'+ artwork_path[1];
+					background_artwork_url = artwork_url;
+				}
+    		} else {*/
+    			if (artwork_url==null) artwork_url = self.path + self.default_image;
+    			background_artwork_url = artwork_url;
+    		//}
+    		$('<li id="track_'+ track.id +'">'+ track.title +'</li>').data('track', track).appendTo("#player_"+ self.id +" .tracks");
     	
     	
-		$('<li id="img_'+ track.id +'" ><img class="background" src="'+ background_artwork_url +'" /><img class="tracklist" src="'+ artwork_url +'" title="'+ track.title +'" /></li>').data({
-			id: track.id,
-			x: n * self.img_dist,
-			num: n,
-		}).appendTo("#player_"+ self.id +" .artwork");
-		// * Get appropriate stream url depending on whether the playlist is private or public.
-		// * If the track includes a *secret_token* add a '&' to the url, else add a '?'.
-		// * Finally, append the consumer key and you'll have a working stream url.
-		url = track.stream_url;
-		(url.indexOf("secret_token") == -1) ? url = url + '?' : url = url + '&';
-		url = url + 'client_id=' + self.client_id;
-		// Create the sound using SoundManager
-		soundManager.createSound({
-			// Give the sound an id and the SoundCloud stream url we created above.
-			id: 'track_' + track.id,
-			url: url,
-			// On play & resume add a *playing* class to the main player div.
-			// This will be used in the stylesheet to hide/show the play/pause buttons depending on state.
-			onplay: function() {
-				$("#player_"+ self.id).addClass('playing');
-				$("#player_"+ self.id +" .interface h2").html(track.title);
-				var text = track.description;
-				text = text.replace(/\r\n\r\n/g,"<br />");
-				$("#player_"+ self.id +" .interface p").html(text);
-			},
-			onresume: function() {
-				$("#player_"+ self.id).addClass('playing');
-			},
-			// On pause, remove the *playing* class from the main player div.
-			onpause: function() {
-				$("#player_"+ self.id).removeClass('playing');
-			},
-			// When a track finished, call the Next Track function. (Declared at the bottom of this file).
-			onfinish: function() {
-				self.nextTrack();
-			},
-			whileplaying: function() {
-				var percent = 3 + this.position / track.duration * 97;
-				$("#player_"+ self.id +" .interface .time").text(secondsToTime(this.position));
-				$("#player_"+ self.id +" .interface .progress_bar span").css('width', percent +'%');
-			}
-		});
+			$('<li id="img_'+ track.id +'" ><img class="background" src="'+ background_artwork_url +'" /><img class="tracklist" src="'+ artwork_url +'" title="'+ track.title +'" /></li>').data({
+				id: track.id,
+				x: n * self.img_dist,
+				num: n,
+			}).appendTo("#player_"+ self.id +" .artwork");
+			// * Get appropriate stream url depending on whether the playlist is private or public.
+			// * If the track includes a *secret_token* add a '&' to the url, else add a '?'.
+			// * Finally, append the consumer key and you'll have a working stream url.
+			url = track.stream_url;
+			(url.indexOf("secret_token") == -1) ? url = url + '?' : url = url + '&';
+			url = url + 'client_id=' + self.client_id;
+			// Create the sound using SoundManager
+			soundManager.createSound({
+				// Give the sound an id and the SoundCloud stream url we created above.
+				id: 'track_' + track.id,
+				url: url,
+				// On play & resume add a *playing* class to the main player div.
+				// This will be used in the stylesheet to hide/show the play/pause buttons depending on state.
+				onplay: function() {
+					$("#player_"+ self.id).addClass('playing');
+					$("#player_"+ self.id +" .interface h2").html(track.title);
+					var text = track.description;
+					text = text.replace(/\r\n\r\n/g,"<br />");
+					$("#player_"+ self.id +" .interface p").html(text);
+				},
+				onresume: function() {
+					$("#player_"+ self.id).addClass('playing');
+				},
+				// On pause, remove the *playing* class from the main player div.
+				onpause: function() {
+					$("#player_"+ self.id).removeClass('playing');
+				},
+				// When a track finished, call the Next Track function. (Declared at the bottom of this file).
+				onfinish: function() {
+					self.nextTrack();
+				},
+				whileplaying: function() {
+					var percent = 3 + this.position / track.duration * 97;
+					$("#player_"+ self.id +" .interface .time").text(secondsToTime(this.position));
+					$("#player_"+ self.id +" .interface .progress_bar span").css('width', percent +'%');
+				}
+			});
+		}
 		if(index==count) {
 			var loadded = self.trackIdList.length;
 			if (loadded==self.img_count) {
