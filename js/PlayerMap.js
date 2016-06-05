@@ -44,6 +44,9 @@ function PlayerMap() {
 	this.client_id = '';
 	this.offset = 0;
 	this.limit = 20;
+	this.max = 9;
+	this.num = 0;
+	this.margin_left;
 	this.img_size = 50;
 	this.img_border = 0;
 	this.img_margin = 4;
@@ -76,6 +79,10 @@ PlayerMap.prototype.initialize = function(opts) {
 	if (typeof opts.img_margin != "undefined") this.img_margin = opts.img_margin;
 	if (typeof opts.default_image != "undefined") this.default_image = opts.default_image;
 	if (typeof opts.style != "undefined") this.style = opts.style;
+	if (typeof opts.max != "undefined") {
+		this.max = opts.max;
+		if (this.max%2==0) this.max--;
+	}
 	this.img_dist = this.img_size + this.img_border*2 + this.img_margin;
 	
 	if (this.style == 'full') {
@@ -84,10 +91,12 @@ PlayerMap.prototype.initialize = function(opts) {
 		this.height = 126;
 	} else {
 		var modulo = 1024%this.img_dist;
-		var num = (1024 - modulo)/this.img_dist;
-		if (num%2==0) num--;
-		this.width = this.img_dist*num - this.img_margin;
-		this.stripOffset = this.img_dist*(parseInt(num/2));
+		this.num = (1024 - modulo)/this.img_dist;
+		if (this.num%2==0) this.num--;
+		if (this.num > this.max) this.num = this.max;
+		this.margin_left = 1 + (this.num - 1)/2;
+		this.width = this.img_dist*this.num - this.img_margin;
+		this.stripOffset = this.img_dist*(parseInt(this.num/2));
 		this.height = 50;
 	}
 	this.outerWidth = this.width + 22;
@@ -348,7 +357,8 @@ PlayerMap.prototype.groupTracks = function(data, more, callback) {
 			var artwork_url = track.artwork_url;
 			// Create the track Marker
 			var text = track.description;
-			text = text.replace(/\r\n\r\n/g,"<br />");
+			text = urlify(text.replace(/\n/g," <br />"));
+			
 			var html = '<h3>'+ track.title +'</h3>';
 			if (artwork_url!=null) {
 				var artwork_path = artwork_url.split('-large');
@@ -484,15 +494,23 @@ PlayerMap.prototype.bindActions = function() {
 					id = $img.data('id');
 		self.goTo(n, id);
 	});
+	var n = self.margin_left;
 	$("#player_"+ this.id +" .artwork li").each(function(index) {
 		var position = $(this).data('x');
-		if (position>=11*self.img_dist) {
-			var old = position;
-			position -= self.img_count*self.img_dist;
-			$(this).data('x', position);
+		var last = self.trackIdList.length - self.margin_left;
+		
+		// images after last position of the strip to the beginning
+		if (position >= (last)*self.img_dist) {
+			var new_position = -(n)*self.img_dist;
+			n--;
+			$(this).data('x', new_position)
+			$(this).css('left', new_position+'px');
+		} else {
+			$(this).css('left', position+'px');
 		}
-		$(this).css('left', position+'px');
+		
 	});
+	
 	// Bind a click event to the play / pause button.
 	$("#player_"+ this.id +" .play, #player_"+ this.id +" .pause").click(function(){
 		if ( $('li').hasClass('active') == true ) {
@@ -607,28 +625,24 @@ PlayerMap.prototype.goTo = function(_n, _id) {
 			var prevPosition = $("#player_"+ self.id +" .artwork li:last").data('x');
 			var list = new Array();
 			$("#player_"+ self.id +" .artwork li").each(function() {
-				var position = $(this).data('x');
-				if ((position + ofset <= -(self.img_count-10)*self.img_dist)&&(dist>=0)) {
-					//alert(position + " . " + prevPosition)
-					position = prevPosition + self.img_dist;
-					$(this).data('x', position);
-					$(this).css('left', position+'px');
-				} else if ((position + ofset >= 11*self.img_dist)&&(dist<=0)) {
-					list.push($(this).data('num')-1);
+				var position = $(this).data('x') + ofset;
+				var last = self.trackIdList.length - self.margin_left;
+				
+				// first image of the strip to the end when going left
+				if ((position <= -(self.margin_left+1)*self.img_dist)&&(dist>=0)){
+					var pos = self.trackIdList.length - (self.margin_left + 1);
+					var new_position = pos * self.img_dist - ofset;
+					$(this).data('x', new_position)
+					$(this).css('left', new_position+'px');
+			
+				// last image from the strip to the beginning when going right
+				} else if ((position >= last*self.img_dist)&&(dist<=0)) {
+					var new_position = -(self.margin_left)*self.img_dist - ofset;
+					$(this).data('x', new_position)
+					$(this).css('left', new_position+'px');
+					
 				}
-				prevPosition = position;
 			});
-			if (dist<=0) {
-				list.reverse();
-				prev = list[0] + 1;
-				if (prev>self.trackIdList.length) prev = 0;
-				var position = $('#img_'+ self.trackIdList[prev]).data('x');
-				for (i=0; i<list.length; i++) {
-					position -= self.img_dist;
-					$('#img_'+self.trackIdList[list[i]]).css('left', position+'px');
-					$('#img_'+self.trackIdList[list[i]]).data('x', position);
-				}
-			}
 		},
 		complete: function(){
 			self.ready = true;
@@ -654,8 +668,11 @@ PlayerMap.prototype.nextTrack = function(){
 		} else if (position == self.img_dist) {
 			$(this).find(".tracklist").animate({ opacity: '1' }, 'slow');
 			$(this).addClass('current');
-		} else if (position == -(self.img_count-11)*self.img_dist){
-			var new_position = 11*self.img_dist - px2int(ofset);
+			
+		// first image of the strip to the end
+		} else if (position == -(self.margin_left)*self.img_dist){
+			var pos = self.trackIdList.length - (self.margin_left);
+			var new_position = pos * self.img_dist - px2int(ofset);
 			$(this).data('x', new_position)
 			$(this).css('left', new_position+'px');
 		}
@@ -676,17 +693,21 @@ PlayerMap.prototype.prevTrack = function(){
 	var ofset = $("#player_"+ this.id +" .artwork").css('left');
 	$("#player_"+ this.id +" .artwork li").each(function(index) {
 		var position = (px2int(ofset) + $(this).data('x'));
+		var last = self.trackIdList.length - self.margin_left - 1;
 		if (position == 0) {
 			$(this).find(".tracklist").animate({ opacity: '0' }, 'slow');
 			$(this).removeClass('current');
 		} else if (position == -self.img_dist) {
 			$(this).find(".tracklist").animate({ opacity: '1' }, 'slow');
 			$(this).addClass('current');
-		} else if (position == 10*self.img_dist) {
-			var new_position = -(self.img_count-10)*self.img_dist - px2int(ofset);
+			
+		// last image from the strip to the beginning
+		} else if (position >= last*self.img_dist) {
+			var new_position = -(self.margin_left + 1)*self.img_dist - px2int(ofset);
 			$(this).data('x', new_position)
 			$(this).css('left', new_position+'px');
 		}
+		 
 	});
 	$("#player_"+ this.id +" .artwork").animate({ left: '+='+self.img_dist }, 'slow', function(){
 		self.ready = true;
@@ -1081,3 +1102,13 @@ InfoBox.prototype.hide = function() {
 InfoBox.prototype.show = function(map) {
 	this.setMap(map);
 };									
+
+
+function urlify(text) {
+    var urlRegex = /(https?:\/\/[^\s]+)/g;
+    return text.replace(urlRegex, function(url) {
+        return '<a href="' + url + '">' + url + '</a>';
+    })
+    // or alternatively
+    // return text.replace(urlRegex, '<a href="$1">$1</a>')
+}

@@ -179,6 +179,7 @@ margin-right: 22px; padding: 10px 0 2px 0; text-align: left; /*background-color:
 	float: left; 
  }
 .customWindow .contentDiv span { font-weight: bold; font-size: 1.2em; padding-top: 4px; }
+.customWindow .contentDiv a { font-style: italic; color: #f944c8; font-size: smaller; }
 .customWindow .contentDiv p { margin: 6px 0 0 0; }
 .customWindow .fancybox { display: block; width: 100px; margin: 0 8px 0 0; float: left; }
 .customWindow .closeWrapper { position: absolute;  top: 0; right: 0; }
