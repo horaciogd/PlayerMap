@@ -12,6 +12,11 @@ horaciogd at vhplab dot net
 Third Part components: SoundManager 2 V2.97a.20131201 - *Scott Schiller*, jQuery v1.9.1 | jQuery UI v1.10.3 - *jQuery Foundation*, jQuery UI Touch Punch v0.2.2 - *Dave Furfero*, Thickbox v3.1 - *Cody Lindley*, Google Maps API v3 and SoundCloud API
 
 
++ Info
+------
+http://www.vhplab.net/spip.php?article221
+
+
 How to
 ------
 
