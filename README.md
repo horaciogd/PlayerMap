@@ -1,4 +1,4 @@
-PlayerMap 1.00
+PlayerMap 1.01
 ==============
 
 PlayerMap 1.01 by Horacio González Diéguez is a script for sound map application development published under a GNU GENERAL PUBLIC LICENSE and originally designed for **"Einander zuhören – Stadt-(Ge)Schichten"** project.
