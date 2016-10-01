@@ -1,4 +1,4 @@
-PlayerMap 1.01
+PlayerMap 1.02
 ==============
 
 PlayerMap 1.01 by Horacio González Diéguez is a script for sound map application development published under a GNU GENERAL PUBLIC LICENSE and originally designed for **"Einander zuhören – Stadt-(Ge)Schichten"** project.
@@ -24,7 +24,7 @@ How to
 You will need one or several accounts depending on the number of recordings you want to publish. *SoundCloud* service is quite limited and you will only be able to upload a few hours of sound for each account.
 
 
-**2) Don't create a group**
+**2) Don't create a group!**
 
 soundcloud has elimiated its groups fature :-(
 
