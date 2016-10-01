@@ -41,6 +41,7 @@ function PlayerMap() {
 	this.container = '';
 	this.path = '';
 	this.group = '';
+	this.user = '';
 	this.client_id = '';
 	this.offset = 0;
 	this.limit = 20;
@@ -72,6 +73,7 @@ PlayerMap.prototype.initialize = function(opts) {
 	this.center = new google.maps.LatLng(opts.lat, opts.lng);
 	this.zoom = opts.zoom;
 	this.path = opts.path;
+	if (typeof opts.user != "undefined") this.user = opts.user;
 	if (typeof opts.group != "undefined") this.group = opts.group;
 	if (typeof opts.client_id != "undefined") this.client_id = opts.client_id;
 	if (typeof opts.img_size != "undefined") this.img_size = opts.img_size;
@@ -162,7 +164,12 @@ PlayerMap.prototype.initialize = function(opts) {
 		wmode: 'transparent',
 		useFastPolling: true,
 		onready: function() {
-			self.loadGroupData();
+			if (self.user!='') {
+				self.loadUserData();
+			} else {
+				// soundcloud groups deprecated!!
+				self.loadGroupData();
+			}
 		}
 	});
 };
@@ -284,6 +291,15 @@ PlayerMap.prototype.loadGroupData = function() {
 		});
 	}
 };
+PlayerMap.prototype.loadUserData = function() {
+	var self = this;
+	if ((this.user!='')&&(this.client_id!='')) {
+		// load soundcloud user data
+		$.getJSON('https://api.soundcloud.com/users/'+ this.user +'.json?client_id='+ this.client_id +'&callback=?', function(data){
+			self.userData(data);		
+		});
+	}
+};
 PlayerMap.prototype.groupData = function(data) {
 	var text = data.description;
 	if (text!=null) {
@@ -297,19 +313,43 @@ PlayerMap.prototype.groupData = function(data) {
 	this.img_count = data.track_count;
 	this.loadGroupTracks();
 };
+PlayerMap.prototype.userData = function(data) {
+	var text = data.description;
+	if (text!=null) {
+		text = text.replace(/\r\n\r\n/g,"<br />");
+		$("#player_"+ this.id +" .header p").html(text);
+	}
+	var name = data.name;
+	if (name!=null) {
+		$("#player_"+ this.id +" .header h1").html(name);
+	}
+	this.img_count = data.track_count;
+	this.loaduserTracks();
+};
 PlayerMap.prototype.loadGroupTracks = function() {
 	var self = this;
 	// load soundcloud group tracks data
 	// get url via alert('https://api.soundcloud.com/groups/'+ this.group +'/tracks.json?client_id='+ this.client_id +'&offset='+ this.offset +'&limit='+ this.limit +'&callback=?');
 	$.getJSON('https://api.soundcloud.com/groups/'+ this.group +'/tracks.json?client_id='+ this.client_id +'&offset='+ this.offset +'&limit='+ this.limit +'&callback=?', function(data){
-		self.groupTracks(data, function(){
+		self.getTracks(data, function(){
 			self.loadGroupTracks();
 		}, function(){
 			self.bindActions();
 		});
 	});					
 };
-PlayerMap.prototype.groupTracks = function(data, more, callback) {
+PlayerMap.prototype.loaduserTracks = function() {
+	var self = this;
+	// load soundcloud user tracks data
+	$.getJSON('https://api.soundcloud.com/users/'+ this.user +'/tracks.json?client_id='+ this.client_id +'&offset='+ this.offset +'&limit='+ this.limit +'&callback=?', function(data){
+		self.getTracks(data, function(){
+			self.loaduserTracks();
+		}, function(){
+			self.bindActions();
+		});
+	});					
+};
+PlayerMap.prototype.getTracks = function(data, more, callback) {
 	// Embed the title of the first track inn the player interface
 	$("#player_"+ this.id +" .interface h2").text(data[0].title);
 	// Loop through each of the tracks
